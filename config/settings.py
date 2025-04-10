@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'djoser',
     'rest_framework.authtoken',
     #local apps
+    'Tasks.apps.TasksConfig',
 
 ]
 
@@ -86,7 +87,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': str(os.getenv('NAME')),
-        'USER': str(os.getenv('USER')) ,
+        'USER': 'postgres' ,
         'PASSWORD': os.getenv('PASSWORD'),
         'HOST': os.getenv('HOST'),
         'PORT': os.getenv('PORT'),
