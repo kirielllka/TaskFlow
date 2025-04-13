@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'djoser',
     'rest_framework.authtoken',
+    ''
     #local apps
     'Tasks.apps.TasksConfig',
 
