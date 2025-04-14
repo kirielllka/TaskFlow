@@ -1,3 +1,7 @@
+target-version = "py312"
+line-length = 70
+
+indent-width = 4
 exclude = [
     ".bzr",
     ".direnv",
@@ -25,31 +29,99 @@ exclude = [
     "node_modules",
     "site-packages",
     "venv",
+    "manage.py",
 ]
+extend-exclude = []
+select = [
+    "A",
+    "ARG",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "I",
+    "ICN",
+    "INP",
+    "M",
+    "N",
+    "PD",
+    "PIE",
+    "Q",
+    "RUF",
+    "SIM",
+    "T",
+    "TRY",
+    "W",
+    "YTT",
+]
+ignore = [
+    "D100",
+    "D101",
+    "D102",
+    "D103",
+    "D104",
+    "D202",
+    "D203",
+    "D212",
+    "D400",
+    "E501",
+    "F401",
+    "ANN101",
+    "ANN102",
+    "A002",
+    "D106",
+    "RUF012",
+]
+extend-select = []
+extend-ignore = []
 
-line-length = 88
-indent-width = 4
-
-target-version = "py312"
-
-[lint]
-select = ["E4", "E7", "E9", "F"]
-ignore = ['F401']
-
+fix = true
 fixable = ["ALL"]
 unfixable = []
-
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 
+[lint.flake8-annotations]
+allow-star-arg-any = true
+
+[lint.flake8-bugbear]
+extend-immutable-calls = ["datetime.datetime.now"]
+
+[lint.flake8-quotes]
+inline-quotes = "double"
+multiline-quotes = "double"
+avoid-escape = false
+
+[lint.flake8-pytest-style]
+fixture-parentheses = true
+
+
+
+[lint.mccabe]
+max-complexity = 10
+
+[lint.isort]
+force-single-line = false
+split-on-trailing-comma = true
+combine-as-imports = true
+force-sort-within-sections = true
+lines-between-types = 1
+known-first-party = ["your_project_name"]
+known-third-party = []
+from-first = true
+
+[lint.pydocstyle]
+convention = "google"
+
 [format]
-# Like Black, use double quotes for strings.
 quote-style = "double"
-
-# Like Black, indent with spaces, rather than tabs.
 indent-style = "space"
-
-# Like Black, respect magic trailing commas.
 skip-magic-trailing-comma = false
-
-# Like Black, automatically detect the appropriate line ending.
 line-ending = "auto"
+
+[per-file-ignores]
+"tests/*.py" = ["D100", "D101", "D103", "F401"]
+"*/__init__.py" = ["F401"]
+"src/my_module/exceptions.py" = ["D105"]
+

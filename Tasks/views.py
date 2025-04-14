@@ -1,9 +1,12 @@
 from django.shortcuts import render
-
-from .models import Tasks, Categories
-from .serializer import UserSerializer,CategoriesSerializer,TasksSerializer
-
 from rest_framework.viewsets import ModelViewSet
+
+from .models import Categories, Tasks
+from .serializer import (
+    CategoriesSerializer,
+    TasksSerializer,
+    UserSerializer,
+)
 
 
 class TasksViewSet(ModelViewSet):
