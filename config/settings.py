@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     "drf_yasg",
     "djoser",
     "rest_framework.authtoken",
-    ""
+    "django_filters",
     #local apps
     "Tasks.apps.TasksConfig",
 

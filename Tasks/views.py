@@ -3,7 +3,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
-
+from rest_framework.filters import SearchFilter, OrderingFilter
 
 from .models import Categories, Tasks
 from .serializer import (
@@ -14,9 +14,12 @@ from .serializer import (
 
 
 class TasksViewSet(ModelViewSet):
-    queryset = Tasks.objects.all()
+    queryset = Tasks.objects.prefetch_related('category').select_related('author').all()
     serializer_class = TasksSerializer
-
+    filter_backends = [OrderingFilter,SearchFilter]
+    search_fields = ['title', 'content', 'time', 'repeats_days', 'category']
+    ordering_fields = ['time', 'status', 'category']
+    ordering = ['time']
 
     @action(detail=True,url_path='complete', methods=['POST'])
     def complete_task(self, request, pk):
@@ -36,7 +39,11 @@ class TasksViewSet(ModelViewSet):
 
 
 class CategoryViewSet(ModelViewSet):
-    queryset = Categories.objects.all()
+    queryset = Categories.objects.select_related('created_user').all()
     serializer_class = CategoriesSerializer
+    filter_backends = [SearchFilter,OrderingFilter]
+    search_fields = ['category_name','created_user']
+
+
 
 
