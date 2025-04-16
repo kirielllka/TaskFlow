@@ -47,7 +47,7 @@ class CategoryViewSet(ModelViewSet):
     filter_backends = [SearchFilter,OrderingFilter]
     search_fields = ['category_name','created_user']
     pagination_class = CategoryPaginations
-    
+
 
 
 

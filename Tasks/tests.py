@@ -59,6 +59,11 @@ class TasksTest(TestCase):
         response = self.client.delete(path=self.url+f"tasks/{task.id}/", content_type=self.content_type)
         self.assertEqual(response.status_code, 204)
 
+    def test_tasks_complete(self):
+        tasks = Tasks.objects.create(**self.data_create)
+        response = self.client.post(path=self.url+f'tasks/{tasks.id}/complete/')
+        self.assertEqual(response.status_code, 200)
+
 @pytest.mark.django_db
 class CategoryTest(TestCase):
 
