@@ -13,4 +13,5 @@ class Tasks(models.Model):
     category = models.ForeignKey(Categories,on_delete=models.SET_NULL,related_name="category", null=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE,related_name="author")
     repeat_days = models.CharField(blank=True, verbose_name="r_days")
+    status = models.BooleanField(blank=True, default=False)
 

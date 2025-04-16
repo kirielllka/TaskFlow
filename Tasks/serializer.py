@@ -19,7 +19,7 @@ class TasksSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tasks
         fields = ["id", "title", "content", "time", "author_info_display", "category_display", "repeat_days_display",
-                  "author", "category", "repeat_days"]
+                  "author", "category", "repeat_days",'status']
 
     def get_author_info_display(self, object):
         serializer = UserSerializer(object.author)
