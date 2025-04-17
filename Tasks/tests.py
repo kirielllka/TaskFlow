@@ -101,3 +101,15 @@ class CategoryTest(TestCase):
         category = Categories.objects.create(category_name = 'data', created_user=self.user)
         response = self.client.delete(path=self.url+f'category/{category.id}/')
         self.assertEqual(response.status_code, 204)
+
+@pytest.mark.django_db
+class UserProfile(TestCase):
+    def setUp(self):
+        self.user = User.objects.create(username="test_user", password="12345qwerty")
+        self.client.force_login(user=self.user)
+        self.url = "/api/v1/"
+        self.content_type = "application/json"
+
+    def test_profile_get(self):
+        response = self.client.get(path=self.url+'profile/')
+        self.assertEqual(response.status_code, 200)

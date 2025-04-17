@@ -15,7 +15,7 @@ from .serializer import (
     UserProfileSerializer,
 )
 
-from .paginations import TasksPaginations,CategoryPaginations
+from .paginations import TasksPagination, CategoryPagination, UserProfilePagination
 
 
 class TasksViewSet(ModelViewSet):
@@ -25,7 +25,7 @@ class TasksViewSet(ModelViewSet):
     search_fields = ['title', 'content', 'time', 'repeats_days', 'category']
     ordering_fields = ['time', 'status', 'category']
     ordering = ['time']
-    pagination_class = TasksPaginations
+    pagination_class = TasksPagination
 
     @action(detail=True,url_path='complete', methods=['POST'])
     def complete_task(self, request, pk):
@@ -49,11 +49,12 @@ class CategoryViewSet(ModelViewSet):
     serializer_class = CategoriesSerializer
     filter_backends = [SearchFilter,OrderingFilter]
     search_fields = ['category_name','created_user']
-    pagination_class = CategoryPaginations
+    pagination_class = CategoryPagination
 
 class UserProfileViewSet(ModelViewSet):
-    queryset = UserProfile.objects.all()
+    queryset = UserProfile.objects.select_related('user').all()
     serializer_class = UserProfileSerializer
+    pagination_class = UserProfilePagination
 
 
 
