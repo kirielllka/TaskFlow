@@ -1,8 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from .models import Categories, Tasks
-
+from .models import Categories, Tasks, UserProfile
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -43,4 +42,16 @@ class CategoriesSerializer(serializers.ModelSerializer):
 
     def get_user_info_display(self, object):
         serializer = UserSerializer(object.created_user)
+        return serializer.data
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    display_user = serializers.SerializerMethodField()
+
+    class Meta:
+        model = UserProfile
+        fields = ['id', 'image', 'display_user','user']
+
+    def get_display_user(self, object):
+        serializer = UserSerializer(object.user)
         return serializer.data

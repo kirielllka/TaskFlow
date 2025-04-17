@@ -15,3 +15,8 @@ class Tasks(models.Model):
     repeat_days = models.CharField(blank=True, verbose_name="r_days")
     status = models.BooleanField(blank=True, default=False)
 
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile', null=False)
+    image = models.CharField(blank=True, null=True)
+
+

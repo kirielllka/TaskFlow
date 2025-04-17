@@ -4,12 +4,15 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter, OrderingFilter
+from django.views.generic import ListView
 
-from .models import Categories, Tasks
+
+from .models import Categories, Tasks, UserProfile
 from .serializer import (
     CategoriesSerializer,
     TasksSerializer,
     UserSerializer,
+    UserProfileSerializer,
 )
 
 from .paginations import TasksPaginations,CategoryPaginations
@@ -48,6 +51,9 @@ class CategoryViewSet(ModelViewSet):
     search_fields = ['category_name','created_user']
     pagination_class = CategoryPaginations
 
+class UserProfileViewSet(ModelViewSet):
+    queryset = UserProfile.objects.all()
+    serializer_class = UserProfileSerializer
 
 
 
