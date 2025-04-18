@@ -7,12 +7,13 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from django.views.generic import ListView
 
 
-from .models import Categories, Tasks, UserProfile
+from .models import Categories, Tasks, UserProfile, Group
 from .serializer import (
     CategoriesSerializer,
     TasksSerializer,
     UserSerializer,
     UserProfileSerializer,
+    GroupSerializer
 )
 
 from .paginations import TasksPagination, CategoryPagination, UserProfilePagination
@@ -55,6 +56,10 @@ class UserProfileViewSet(ModelViewSet):
     queryset = UserProfile.objects.select_related('user').all()
     serializer_class = UserProfileSerializer
     pagination_class = UserProfilePagination
+
+class GroupViewSet(ModelViewSet):
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
 
 
 

@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from .models import Categories, Tasks, UserProfile
+from .models import Categories, Tasks, UserProfile, Group
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -54,4 +54,29 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     def get_display_user(self, object):
         serializer = UserSerializer(object.user)
+        return serializer.data
+
+class GroupSerializer(serializers.ModelSerializer):
+    member_count = serializers.SerializerMethodField()
+    created_user = serializers.HiddenField(default=serializers.CurrentUserDefault)
+    created_user_display = serializers.SerializerMethodField()
+    members = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Group
+        fields = ['id','created_user','created_user_display','members', 'member_count']
+
+    def get_member(self, object):
+        profiles = UserProfile.objects.filter(group_id=object.id)
+        users = []
+        for profile in profiles:
+            users.append(UserSerializer(User.objects.get(id=profile.user)).data)
+        return users
+
+    def get_member_count(self, object):
+        profiles = UserProfile.objects.filter(group_id=object.id)
+        return profiles.count()
+
+    def get_created_user_display(self, object):
+        serializer = UserSerializer(object.created_user)
         return serializer.data
