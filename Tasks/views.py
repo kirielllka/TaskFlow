@@ -16,7 +16,7 @@ from .serializer import (
     GroupSerializer
 )
 
-from .paginations import TasksPagination, CategoryPagination, UserProfilePagination
+from .paginations import TasksPagination, CategoryPagination, UserProfilePagination, GroupPagination
 
 
 class TasksViewSet(ModelViewSet):
@@ -58,8 +58,21 @@ class UserProfileViewSet(ModelViewSet):
     pagination_class = UserProfilePagination
 
 class GroupViewSet(ModelViewSet):
-    queryset = Group.objects.all()
+    queryset = Group.objects.select_related('creater').all()
     serializer_class = GroupSerializer
+    pagination_class = GroupPagination
 
+    @action(detail=True, url_path='join',methods=['POST'])
+    def join(self, request, pk):
+        profile = UserProfile.objects.get(id=request.user.id)
+        profile.group_id = self.get_object()
+        profile.save()
+        return Response(status=status.HTTP_200_OK,data=UserProfileSerializer(profile).data)
+    @action(detail=True, url_path='exit', methods=['POST'])
+    def exit(self, request, pk):
+        profile = UserProfile.objects.get(id=request.user.id)
+        profile.group_id = None
+        profile.save()
+        return Response(status=status.HTTP_200_OK,data=UserProfileSerializer(profile).data)
 
 

@@ -15,3 +15,8 @@ class UserProfilePagination(PageNumberPagination):
     page_size = 5
     page_query_param = 'userprofile_size'
     max_page_size = 100
+
+class GroupPagination(PageNumberPagination):
+    page_size = 3
+    page_query_param = 'group_size'
+    max_page_size = 100

@@ -50,7 +50,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserProfile
-        fields = ['id', 'image', 'display_user','user']
+        fields = ['id', 'image', 'display_user','user','group_id']
 
     def get_display_user(self, object):
         serializer = UserSerializer(object.user)
@@ -58,25 +58,22 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 class GroupSerializer(serializers.ModelSerializer):
     member_count = serializers.SerializerMethodField()
-    created_user = serializers.HiddenField(default=serializers.CurrentUserDefault)
+    creater= serializers.HiddenField(default=serializers.CurrentUserDefault())
     created_user_display = serializers.SerializerMethodField()
     members = serializers.SerializerMethodField()
 
     class Meta:
         model = Group
-        fields = ['id','created_user','created_user_display','members', 'member_count']
+        fields = ['id','name','creater','created_user_display','members', 'member_count']
 
-    def get_member(self, object):
+    def get_members(self, object):
         profiles = UserProfile.objects.filter(group_id=object.id)
-        users = []
-        for profile in profiles:
-            users.append(UserSerializer(User.objects.get(id=profile.user)).data)
+        users = [UserSerializer(profile.user).data for profile in profiles]
         return users
 
     def get_member_count(self, object):
-        profiles = UserProfile.objects.filter(group_id=object.id)
-        return profiles.count()
+        return UserProfile.objects.filter(group_id=object.id).count()
 
     def get_created_user_display(self, object):
-        serializer = UserSerializer(object.created_user)
+        serializer = UserSerializer(object.creater)
         return serializer.data
