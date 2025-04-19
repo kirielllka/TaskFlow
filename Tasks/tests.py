@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 import pytest
 
-from .models import Categories, Tasks
+from .models import Categories, Tasks, Group
 
 
 @pytest.mark.django_db
@@ -103,7 +103,7 @@ class CategoryTest(TestCase):
         self.assertEqual(response.status_code, 204)
 
 @pytest.mark.django_db
-class UserProfile(TestCase):
+class UserProfileTest(TestCase):
     def setUp(self):
         self.user = User.objects.create(username="test_user", password="12345qwerty")
         self.client.force_login(user=self.user)
@@ -112,4 +112,39 @@ class UserProfile(TestCase):
 
     def test_profile_get(self):
         response = self.client.get(path=self.url+'profile/')
+        self.assertEqual(response.status_code, 200)
+
+@pytest.mark.django_db
+class GroupTest(TestCase):
+    def setUp(self):
+        self.user = User.objects.create(username="test_user", password="12345qwerty")
+        self.client.force_login(user=self.user)
+        self.url = "/api/v1/"
+        self.content_type = "application/json"
+
+    def test_group_create(self):
+        response = self.client.post(data={'name':"testgroup",'creater':self.user.id}, path=self.url+'groups/', content_type=self.content_type)
+        self.assertEqual(response.status_code, 201)
+        if response.status_code == 201:
+            response = self.client.get(path=self.url +'groups/')
+            self.assertEqual(response.status_code, 200)
+
+    def test_group_put(self):
+        group = Group.objects.create(name='testgroup',creater=self.user)
+        response = self.client.put(data={'name':'newname','creater':self.user.id}, path=self.url+f'groups/{group.id}/',content_type=self.content_type)
+        self.assertEqual(response.status_code, 200)
+
+    def test_group_delete(self):
+        group = Group.objects.create(name='testgroup',creater=self.user)
+        response = self.client.delete(path=self.url+f'groups/{group.id}/', content_type=self.content_type)
+        self.assertEqual(response.status_code, 204)
+
+    def test_group_join(self):
+        group = Group.objects.create(name='testgroup',creater=self.user)
+        response = self.client.post(data={}, path=self.url+f'groups/{group.id}/join/',content_type=self.content_type)
+        self.assertEqual(response.status_code, 200)
+
+    def test_group_exit(self):
+        group = Group.objects.create(name='testgroup',creater=self.user)
+        response = self.client.post(data={}, path=self.url+f'groups/{group.id}/exit/',content_type=self.content_type)
         self.assertEqual(response.status_code, 200)
