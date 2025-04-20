@@ -15,11 +15,23 @@ class Tasks(models.Model):
     repeat_days = models.CharField(blank=True, verbose_name="r_days")
     status = models.BooleanField(blank=True, default=False)
 
+    def to_json(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'content': self.content,
+            'time': self.time,
+            'category': self.category,
+            'author': self.category,
+            'repeats_days': self.repeat_days,
+            'status': self.status,
+        }
+
 class Group(models.Model):
-    creater = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='creater_group')
-    name = models.CharField(blank=False, default='Group')
+    creater = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="creater_group")
+    name = models.CharField(blank=False, default="Group")
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile', null=False)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile", null=False)
     image = models.CharField(blank=True, null=True)
-    group_id = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, related_name='group')
+    group_id = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, related_name="group")

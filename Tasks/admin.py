@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Categories, Tasks, UserProfile,Group
+from .models import Categories, Group, Tasks, UserProfile
 
 admin.site.register(Tasks)
 admin.site.register(Categories)

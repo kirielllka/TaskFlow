@@ -1,7 +1,8 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from .models import Categories, Tasks, UserProfile, Group
+from .models import Categories, Group, Tasks, UserProfile
+
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -18,7 +19,7 @@ class TasksSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tasks
         fields = ["id", "title", "content", "time", "author_info_display", "category_display", "repeat_days_display",
-                  "author", "category", "repeat_days",'status']
+                  "author", "category", "repeat_days","status"]
 
     def get_author_info_display(self, object):
         serializer = UserSerializer(object.author)
@@ -50,7 +51,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserProfile
-        fields = ['id', 'image', 'display_user','user','group_id']
+        fields = ["id", "image", "display_user","user","group_id"]
 
     def get_display_user(self, object):
         serializer = UserSerializer(object.user)
@@ -64,7 +65,7 @@ class GroupSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Group
-        fields = ['id','name','creater','created_user_display','members', 'member_count']
+        fields = ["id","name","creater","created_user_display","members", "member_count"]
 
     def get_members(self, object):
         profiles = UserProfile.objects.filter(group_id=object.id)

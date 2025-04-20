@@ -1,11 +1,11 @@
-import json
 from http.client import responses
+import json
 
 from django.contrib.auth.models import User
 from django.test import TestCase
 import pytest
 
-from .models import Categories, Tasks, Group
+from .models import Categories, Group, Tasks
 
 
 @pytest.mark.django_db
@@ -39,7 +39,7 @@ class TasksTest(TestCase):
         self.assertEqual(response.status_code,201)
 
         if response.status_code == 201:
-            response = self.client.get(path=self.url+'tasks/')
+            response = self.client.get(path=self.url+"tasks/")
             self.assertEqual(response.status_code, 200)
 
 
@@ -61,7 +61,7 @@ class TasksTest(TestCase):
 
     def test_tasks_complete(self):
         tasks = Tasks.objects.create(**self.data_create)
-        response = self.client.post(path=self.url+f'tasks/{tasks.id}/complete/')
+        response = self.client.post(path=self.url+f"tasks/{tasks.id}/complete/")
         self.assertEqual(response.status_code, 200)
 
 @pytest.mark.django_db
@@ -79,27 +79,27 @@ class CategoryTest(TestCase):
         data = {
             "category_name":"test category",
         }
-        response = self.client.post(path=self.url+f'category/',data=data,content_type=self.content_type)
+        response = self.client.post(path=self.url+"category/",data=data,content_type=self.content_type)
         self.assertEqual(response.status_code, 201)
 
         if response.status_code == 201:
-            response = self.client.get(path=self.url+'category/')
+            response = self.client.get(path=self.url+"category/")
             self.assertEqual(response.status_code, 200)
 
     def test_category_put(self):
         changed_data = {
-            'category_name':'new data',
-            'created_user':self.user.id
+            "category_name":"new data",
+            "created_user":self.user.id
         }
-        category = Categories.objects.create(category_name = 'data', created_user=self.user)
+        category = Categories.objects.create(category_name = "data", created_user=self.user)
 
-        response = self.client.put(path=self.url+f'category/{category.id}/', data=changed_data, content_type=self.content_type)
+        response = self.client.put(path=self.url+f"category/{category.id}/", data=changed_data, content_type=self.content_type)
 
         self.assertEqual(response.status_code, 200)
 
     def test_category_delete(self):
-        category = Categories.objects.create(category_name = 'data', created_user=self.user)
-        response = self.client.delete(path=self.url+f'category/{category.id}/')
+        category = Categories.objects.create(category_name = "data", created_user=self.user)
+        response = self.client.delete(path=self.url+f"category/{category.id}/")
         self.assertEqual(response.status_code, 204)
 
 @pytest.mark.django_db
@@ -111,7 +111,7 @@ class UserProfileTest(TestCase):
         self.content_type = "application/json"
 
     def test_profile_get(self):
-        response = self.client.get(path=self.url+'profile/')
+        response = self.client.get(path=self.url+"profile/")
         self.assertEqual(response.status_code, 200)
 
 @pytest.mark.django_db
@@ -123,28 +123,30 @@ class GroupTest(TestCase):
         self.content_type = "application/json"
 
     def test_group_create(self):
-        response = self.client.post(data={'name':"testgroup",'creater':self.user.id}, path=self.url+'groups/', content_type=self.content_type)
+        response = self.client.post(data={"name":"testgroup","creater":self.user.id}, path=self.url+"groups/",
+                                    content_type=self.content_type)
         self.assertEqual(response.status_code, 201)
         if response.status_code == 201:
-            response = self.client.get(path=self.url +'groups/')
+            response = self.client.get(path=self.url +"groups/")
             self.assertEqual(response.status_code, 200)
 
     def test_group_put(self):
-        group = Group.objects.create(name='testgroup',creater=self.user)
-        response = self.client.put(data={'name':'newname','creater':self.user.id}, path=self.url+f'groups/{group.id}/',content_type=self.content_type)
+        group = Group.objects.create(name="testgroup",creater=self.user)
+        response = self.client.put(data={"name":"newname","creater":self.user.id}, path=self.url+f"groups/{group.id}/",
+                                    content_type=self.content_type)
         self.assertEqual(response.status_code, 200)
 
     def test_group_delete(self):
-        group = Group.objects.create(name='testgroup',creater=self.user)
-        response = self.client.delete(path=self.url+f'groups/{group.id}/', content_type=self.content_type)
+        group = Group.objects.create(name="testgroup",creater=self.user)
+        response = self.client.delete(path=self.url+f"groups/{group.id}/", content_type=self.content_type)
         self.assertEqual(response.status_code, 204)
 
     def test_group_join(self):
-        group = Group.objects.create(name='testgroup',creater=self.user)
-        response = self.client.post(data={}, path=self.url+f'groups/{group.id}/join/',content_type=self.content_type)
+        group = Group.objects.create(name="testgroup",creater=self.user)
+        response = self.client.post(data={}, path=self.url+f"groups/{group.id}/join/",content_type=self.content_type)
         self.assertEqual(response.status_code, 200)
 
     def test_group_exit(self):
-        group = Group.objects.create(name='testgroup',creater=self.user)
-        response = self.client.post(data={}, path=self.url+f'groups/{group.id}/exit/',content_type=self.content_type)
+        group = Group.objects.create(name="testgroup",creater=self.user)
+        response = self.client.post(data={}, path=self.url+f"groups/{group.id}/exit/",content_type=self.content_type)
         self.assertEqual(response.status_code, 200)

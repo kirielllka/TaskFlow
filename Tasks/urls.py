@@ -3,7 +3,12 @@ from rest_framework import routers
 
 from config.yasg import urlpatterns as doc_url
 
-from .views import CategoryViewSet, TasksViewSet, UserProfileViewSet, GroupViewSet
+from .views import (
+    CategoryViewSet,
+    GroupViewSet,
+    TasksViewSet,
+    UserProfileViewSet,
+)
 
 router = routers.DefaultRouter()
 router.register(r"tasks", TasksViewSet, basename="tasks")
