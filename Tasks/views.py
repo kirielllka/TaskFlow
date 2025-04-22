@@ -36,17 +36,16 @@ class TasksViewSet(ModelViewSet):
     ordering = ["time"]
     pagination_class = TasksPagination
 
-    def get_queryset(self):
-        if 'tasks' in cache:
-            tasks = cache.get('tasks')
-            return tasks
-        else:
-            tasks = Tasks.objects.all()
-            result = tasks
-            cache.set('tasks', result,timeout=CACHE_TTL)
-            return result
 
 
+    @action(detail=False, url_path='user_me', methods=['GET'])
+    def get_by_user(self, request):
+        tasks = cache.get(f'tasks{request.user.id}')
+        if not tasks:
+            tasks = Tasks.objects.filter(author=request.user.id)
+            cache.set(f'tasks{request.user.id}',tasks,DEFAULT_TIMEOUT)
+        result = [TasksSerializer(task).data for task in tasks]
+        return Response(data=result, status=status.HTTP_200_OK)
 
     @action(detail=True,url_path="complete", methods=["POST"])
     def complete_task(self, request, pk):
