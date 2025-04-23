@@ -17,14 +17,14 @@ class Tasks(models.Model):
 
     def to_json(self):
         return {
-            'id': self.id,
-            'title': self.title,
-            'content': self.content,
-            'time': self.time,
-            'category': self.category,
-            'author': self.category,
-            'repeats_days': self.repeat_days,
-            'status': self.status,
+            "id": self.id,
+            "title": self.title,
+            "content": self.content,
+            "time": self.time,
+            "category": self.category,
+            "author": self.category,
+            "repeats_days": self.repeat_days,
+            "status": self.status,
         }
 
 class Group(models.Model):

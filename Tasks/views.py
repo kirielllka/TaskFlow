@@ -1,9 +1,8 @@
+from django.conf import settings
+from django.core.cache import cache
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from django.shortcuts import render
 from django.views.generic import ListView
-from django.core.cache import cache
-from django.conf import settings
-from django.core.cache.backends.base import DEFAULT_TIMEOUT
-
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter, SearchFilter
@@ -25,7 +24,7 @@ from .serializer import (
     UserSerializer,
 )
 
-CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
+CACHE_TTL = getattr(settings, "CACHE_TTL", DEFAULT_TIMEOUT)
 
 class TasksViewSet(ModelViewSet):
     queryset = Tasks.objects.prefetch_related("category").select_related("author").all()
@@ -38,12 +37,12 @@ class TasksViewSet(ModelViewSet):
 
 
 
-    @action(detail=False, url_path='user_me', methods=['GET'])
+    @action(detail=False, url_path="user_me", methods=["GET"])
     def get_by_user(self, request):
-        tasks = cache.get(f'tasks{request.user.id}')
+        tasks = cache.get(f"tasks{request.user.id}")
         if not tasks:
             tasks = Tasks.objects.filter(author=request.user.id)
-            cache.set(f'tasks{request.user.id}',tasks,DEFAULT_TIMEOUT)
+            cache.set(f"tasks{request.user.id}",tasks,DEFAULT_TIMEOUT)
         result = [TasksSerializer(task).data for task in tasks]
         return Response(data=result, status=status.HTTP_200_OK)
 
