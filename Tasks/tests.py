@@ -64,6 +64,7 @@ class TasksTest(TestCase):
         response = self.client.post(path=self.url+f"tasks/{tasks.id}/complete/")
         self.assertEqual(response.status_code, 200)
 
+
 @pytest.mark.django_db
 class CategoryTest(TestCase):
 
