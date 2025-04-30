@@ -4,7 +4,7 @@ RUN adduser --disabled-password taskflow-user
 
 
 
-WORKDIR /TaskFlow
+WORKDIR /apps/TaskFlow
 
 COPY requirements.txt .
 RUN apt-get update && \
@@ -12,7 +12,7 @@ RUN apt-get update && \
 RUN pip install --upgrade pip
 RUN pip install --no-cache -r requirements.txt || cat requirements.txt
 
-COPY TaskFlow /TaskFlow
+COPY ./apps/TaskFlow /apps/TaskFlow
 
 ENV PYTHONPATH=/TaskFlow
 
