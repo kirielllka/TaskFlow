@@ -82,7 +82,7 @@ CACHES = {
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-CELERY_BROKER_URL='amqp://rabbit:rabbit@rabbitmq:15672/'
+CELERY_BROKER_URL='amqp://rabbit:rabbit@rabbitmq:5672/'
 
 
 DATABASES = {
