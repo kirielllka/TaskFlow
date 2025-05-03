@@ -41,17 +41,33 @@ services:
     command: >
       sh -c "python3 manage.py runserver 0.0.0.0:8000"
 
-  worker:
+  celery-worker:
     build:
       context: .
-    hostname: worker
+    hostname: celery-worker
     entrypoint: celery
-    command: -A celery_app.app worker --loglevel=info
+    command: -A config worker --loglevel=info
     networks:
       - backend
+    volumes:
+      - ./apps/TaskFlow:/TaskFlow/apps/TaskFlow
     depends_on:
       - rabbitmq
+      - web-app
 
+  celery-beat:
+    build:
+      context: .
+    hostname: celery-beat
+    entrypoint: celery
+    command: -A config worker --loglevel=info
+    networks:
+      - backend
+    volumes:
+      - ./apps/TaskFlow:/TaskFlow/apps/TaskFlow
+    depends_on:
+      - rabbitmq
+      - web-app
 
   rabbitmq:
     image: rabbitmq:3.10.7-management
