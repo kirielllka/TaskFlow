@@ -42,9 +42,6 @@ class BasePermissionViewSet(ModelViewSet):
         return [permission() for permission in permission_classes]
 
 
-
-
-
 class TasksViewSet(BasePermissionViewSet):
     queryset = Tasks.objects.prefetch_related("category").select_related("author").all()
     serializer_class = TasksSerializer
@@ -53,8 +50,6 @@ class TasksViewSet(BasePermissionViewSet):
     ordering_fields = ["time", "status", "category"]
     ordering = ["time"]
     pagination_class = TasksPagination
-
-
 
     @action(detail=False, url_path="user_me", methods=["GET"])
     def get_by_user(self, request):
@@ -72,14 +67,12 @@ class TasksViewSet(BasePermissionViewSet):
         task.save()
         return Response(data=TasksSerializer(task).data,status=status.HTTP_200_OK)
 
-
     @action(detail=True, url_path="uncomplete", methods=["POST"])
     def uncomplete_task(self, request, pk):
         task = self.get_object()
         task.status = False
         task.save()
         return Response(data=TasksSerializer(task).data,status=status.HTTP_200_OK)
-
 
 
 class CategoryViewSet(BasePermissionViewSet):
@@ -89,10 +82,12 @@ class CategoryViewSet(BasePermissionViewSet):
     search_fields = ["category_name","created_user"]
     pagination_class = CategoryPagination
 
+
 class UserProfileViewSet(BasePermissionViewSet):
     queryset = UserProfile.objects.select_related("user").all()
     serializer_class = UserProfileSerializer
     pagination_class = UserProfilePagination
+
 
 class GroupViewSet(BasePermissionViewSet):
     queryset = Group.objects.select_related("creater").all()
@@ -105,6 +100,7 @@ class GroupViewSet(BasePermissionViewSet):
         profile.group_id = self.get_object()
         profile.save()
         return Response(status=status.HTTP_200_OK,data=UserProfileSerializer(profile).data)
+
     @action(detail=True, url_path="exit", methods=["POST"])
     def exit(self, request, pk):
         profile = UserProfile.objects.get(id=request.user.id)

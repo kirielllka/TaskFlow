@@ -24,6 +24,7 @@ class TasksTest(TestCase):
             "repeat_days": "1 2 3",
             "author":self.user,
             }
+
     def test_tasks_create(self):
         response = self.client.post(data={
             "title": "string",
@@ -40,7 +41,6 @@ class TasksTest(TestCase):
         if response.status_code == 201:
             response = self.client.get(path=self.url+"tasks/")
             self.assertEqual(response.status_code, 200)
-
 
     def test_tasks_put(self):
         data_changed = {
@@ -66,6 +66,8 @@ class TasksTest(TestCase):
     def test_tasks_get_by_user(self):
         response = self.client.get(path=self.url+'tasks/user_me/')
         self.assertEqual(response.status_code, 200)
+
+
 @pytest.mark.django_db
 class CategoryTest(TestCase):
 
@@ -74,8 +76,6 @@ class CategoryTest(TestCase):
         self.client.force_login(user=self.user)
         self.url = "/api/v1/"
         self.content_type = "application/json"
-
-
 
     def test_category_create(self):
         data = {
@@ -104,6 +104,7 @@ class CategoryTest(TestCase):
         response = self.client.delete(path=self.url+f"category/{category.id}/")
         self.assertEqual(response.status_code, 204)
 
+
 @pytest.mark.django_db
 class UserProfileTest(TestCase):
     def setUp(self):
@@ -115,6 +116,7 @@ class UserProfileTest(TestCase):
     def test_profile_get(self):
         response = self.client.get(path=self.url+"profile/")
         self.assertEqual(response.status_code, 200)
+
 
 @pytest.mark.django_db
 class GroupTest(TestCase):

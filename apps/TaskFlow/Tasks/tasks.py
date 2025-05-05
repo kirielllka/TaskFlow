@@ -3,7 +3,6 @@ import json
 
 from celery import shared_task
 
-from apps.TaskFlow.config.celery import app
 from .models import Tasks
 
 from pika import ConnectionParameters, BlockingConnection

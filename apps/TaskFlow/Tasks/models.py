@@ -6,6 +6,7 @@ class Categories(models.Model):
     category_name = models.CharField(blank=False, verbose_name="name")
     created_user = models.ForeignKey(User,blank=False,on_delete=models.CASCADE,related_name="created_user")
 
+
 class Tasks(models.Model):
     title = models.CharField(blank=False, verbose_name="title")
     content = models.TextField(verbose_name="content")
@@ -27,9 +28,11 @@ class Tasks(models.Model):
             "status": self.status,
         }
 
+
 class Group(models.Model):
     creater = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="creater_group")
     name = models.CharField(blank=False, default="Group")
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile", null=False)

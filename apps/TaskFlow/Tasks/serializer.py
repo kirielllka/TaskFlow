@@ -45,6 +45,7 @@ class CategoriesSerializer(serializers.ModelSerializer):
         serializer = UserSerializer(object.created_user)
         return serializer.data
 
+
 class UserProfileSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     display_user = serializers.SerializerMethodField()
@@ -56,6 +57,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     def get_display_user(self, object):
         serializer = UserSerializer(object.user)
         return serializer.data
+
 
 class GroupSerializer(serializers.ModelSerializer):
     member_count = serializers.SerializerMethodField()
